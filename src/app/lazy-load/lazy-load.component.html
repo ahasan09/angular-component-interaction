@@ -1,0 +1,18 @@
+<h2>
+  Data Get From Behaviour Subject
+</h2>
+<table *ngIf="data.length">
+  <tr>
+    <th *ngFor="let column of columns">{{column.name}}</th>
+  </tr>
+  <tr *ngFor="let item of data">
+    <td *ngFor="let column of columns">
+      <img *ngIf="column.type=='image'" [src]="item[column.name]" alt="Best rated Movie">
+      <!-- <span *ngIf="column.type=='html'" [innerHTML]="item[column.name] | sanitizeHtml">
+      </span> -->
+      <span *ngIf="!column.type">
+        {{item[column.name]}}
+      </span>
+    </td>
+  </tr>
+</table>

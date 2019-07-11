@@ -1,0 +1,26 @@
+<div>
+  <div style="margin: 10px">
+    <form class="example-form">
+      <mat-form-field class="example-full-width" appearance="outline">
+        <mat-label>ViewChild Input</mat-label>
+        <input #movieSearchInput matInput placeholder="ViewChild Input" name="viewChildInput">
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width" appearance="outline">
+        <mat-label>EventEmitter Input</mat-label>
+        <input matInput [(ngModel)]="searchText" placeholder="EventEmitter Input" name="eventEmitterInput">
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="searchMovie()">Search</button>
+      <button class="margin" mat-raised-button color="primary" (click)="searchMovieBehaviourSubject()">Behavior
+        Subject</button>
+    </form>
+  </div>
+  <div *ngIf="isSearching">
+    <div>
+      <h4>Searching ... </h4>
+    </div>
+  </div>
+  <div style="border-style: groove; margin: 20px">
+    <app-data-table #dataTableComponent [configOption]="configOption"></app-data-table>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+<div *ngIf="!datatableModel?.Data?.length">
+  <h3>No Data to display</h3>
+</div>
+
+<table *ngIf="datatableModel?.Data?.length">
+  <tr>
+    <th *ngFor="let column of configOption?.Columns">{{column.name}}</th>
+  </tr>
+  <tr *ngFor="let item of datatableModel?.Data">
+    <td *ngFor="let column of configOption?.Columns">
+      <img *ngIf="column.type=='image'" [src]="item[column.name]" alt="Best rated Movie">
+      <div *ngIf="column.type=='html'" [innerHTML]="item[column.name] | sanitizeHtml">
+      </div>
+      <div *ngIf="!column.type">
+        {{item[column.name]}}
+      </div>
+    </td>
+  </tr>
+</table>
