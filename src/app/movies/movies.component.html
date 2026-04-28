@@ -1,26 +1,50 @@
-<div>
-  <div style="margin: 10px">
-    <form class="example-form">
-      <mat-form-field class="example-full-width" appearance="outline">
-        <mat-label>ViewChild Input</mat-label>
-        <input #movieSearchInput matInput placeholder="ViewChild Input" name="viewChildInput">
-      </mat-form-field>
+<div class="search-card">
+  <h2>TV Show Search</h2>
+  <p class="subtitle">Three component-interaction patterns in one view</p>
 
-      <mat-form-field class="example-full-width" appearance="outline">
-        <mat-label>EventEmitter Input</mat-label>
-        <input matInput [(ngModel)]="searchText" placeholder="EventEmitter Input" name="eventEmitterInput">
-      </mat-form-field>
-      <button mat-raised-button color="primary" (click)="searchMovie()">Search</button>
-      <button class="margin" mat-raised-button color="primary" (click)="searchMovieBehaviourSubject()">Behavior
-        Subject</button>
-    </form>
+  @if (isLoading()) {
+    <mat-progress-bar mode="indeterminate" class="progress-bar" />
+  }
+
+  <div class="inputs-row">
+    <!-- Pattern 1: ViewChild + fromEvent — reactive, debounced auto-search -->
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>ViewChild — auto search</mat-label>
+      <input #movieSearchInput matInput placeholder="Type 3+ chars…" name="viewChildInput" />
+      <mat-hint>Triggers search via fromEvent after 500ms debounce</mat-hint>
+    </mat-form-field>
+
+    <!-- Pattern 2: EventEmitter — parent emits to child via ViewChild -->
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>EventEmitter — manual search</mat-label>
+      <input matInput [(ngModel)]="searchText" placeholder="Search shows…" name="eventEmitterInput" />
+      <mat-hint>Button emits directly on child's EventEmitter</mat-hint>
+    </mat-form-field>
   </div>
-  <div *ngIf="isSearching">
-    <div>
-      <h4>Searching ... </h4>
-    </div>
+
+  <div class="buttons-row">
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="searchByEventEmitter()"
+      [disabled]="isLoading()"
+    >
+      Search (EventEmitter)
+    </button>
+    <button
+      mat-raised-button
+      color="accent"
+      (click)="searchByBehaviorSubject()"
+      [disabled]="isLoading()"
+    >
+      Search (BehaviorSubject)
+    </button>
   </div>
-  <div style="border-style: groove; margin: 20px">
-    <app-data-table #dataTableComponent [configOption]="configOption"></app-data-table>
-  </div>
+</div>
+
+<div class="table-container">
+  <app-data-table
+    #dataTableComponent
+    [configOption]="configOption"
+  />
 </div>

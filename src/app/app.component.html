@@ -1,11 +1,9 @@
-<div>
-  <mat-toolbar>
-    <button mat-raised-button color="primary" routerLink="/movies">Movies</button>
-    <button mat-raised-button color="primary" routerLink="/404">404</button>
-    <button mat-raised-button color="primary" routerLink="/lazy-load">Lazy Load</button>
-  </mat-toolbar>
-  <div class="container">
-
-    <router-outlet></router-outlet>
-  </div>
+<mat-toolbar color="primary">
+  <span class="toolbar-title">Angular Component Interaction</span>
+  <button mat-button routerLink="/movies">Movies</button>
+  <button mat-button routerLink="/lazy-load">Lazy Load</button>
+  <button mat-button routerLink="/404">404</button>
+</mat-toolbar>
+<div class="container">
+  <router-outlet />
 </div>

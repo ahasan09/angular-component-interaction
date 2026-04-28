@@ -1,34 +1,41 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { Observable, BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { Movie } from './data-model';
+import { TvMazeSearchResult, TvMazeShow } from './tvmaze.models';
+import { DatatableModel } from '../data-table/models/datatable-model';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class SharedDataService {
-    private _tvMazeURL: string = 'https://api.tvmaze.com/search/shows';
+  private readonly tvMazeSearchURL = 'https://api.tvmaze.com/search/shows';
+  private readonly tvMazeShowURL = 'https://api.tvmaze.com/shows';
 
-    private sharedDataSource = new BehaviorSubject<string>("DEFAULT_MESSAGE");
-    currentSharedData = this.sharedDataSource.asObservable();
+  private readonly sharedDataSource = new BehaviorSubject<DatatableModel<Movie> | null>(null);
+  readonly currentSharedData$ = this.sharedDataSource.asObservable();
 
-    constructor(private _http: HttpClient) { }
+  private readonly http = inject(HttpClient);
 
-    search(query: any): Observable<any> {
-        return this._http.get(this._tvMazeURL, {
-            params: { q: query }
-        }).pipe(map((movies: any) => {
-            let modifiedMovies = [];
-            movies.map((movie: any) => movie.show).forEach((item: any) => {
-                modifiedMovies.push(new Movie(item));
-            });
+  search(query: string): Observable<Movie[]> {
+    return this.http
+      .get<TvMazeSearchResult[]>(this.tvMazeSearchURL, { params: { q: query } })
+      .pipe(
+        map(results => results.map(r => new Movie(r.show))),
+        catchError(err =>
+          throwError(() => new Error((err as { message?: string }).message ?? 'Search failed'))
+        )
+      );
+  }
 
-            return modifiedMovies;
-        }));
-    }
+  getShow(id: number): Observable<TvMazeShow> {
+    return this.http.get<TvMazeShow>(`${this.tvMazeShowURL}/${id}`).pipe(
+      catchError(err =>
+        throwError(() => new Error((err as { message?: string }).message ?? 'Failed to load show'))
+      )
+    );
+  }
 
-    changeSharedData(data: any) {
-        this.sharedDataSource.next(data);
-    }
-
+  pushResults(data: DatatableModel<Movie>): void {
+    this.sharedDataSource.next(data);
+  }
 }
-

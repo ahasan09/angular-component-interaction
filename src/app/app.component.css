@@ -1,4 +1,8 @@
-.container{
-    margin: 0px 5px 0px 5px;
-    border-style: dashed;
+.toolbar-title {
+  flex: 1;
+  font-size: 1.1rem;
+}
+
+.container {
+  margin: 16px;
 }

@@ -1,59 +1,112 @@
-import { Component, OnInit, Input, EventEmitter } from '@angular/core';
-import { DatatableModel } from './models/datatable-model';
+import {
+  Component,
+  DestroyRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BehaviorSubject } from 'rxjs';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { DatatableModel } from './models/datatable-model';
 import { DataTableSharedService } from './data-table-shared.service';
+import { SanitizeHtmlPipe } from '../shared/sanitize-html.pipe';
+
+export interface ColumnConfig {
+  name: string;
+  type?: 'image' | 'html' | 'link';
+  linkPrefix?: string;
+}
+
+export interface TableConfig<T> {
+  columns: ColumnConfig[];
+  data: T[];
+}
 
 @Component({
   selector: 'app-data-table',
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterLink,
+    MatPaginatorModule,
+    MatProgressSpinnerModule,
+    SanitizeHtmlPipe,
+  ],
   templateUrl: './data-table.component.html',
-  styleUrls: ['./data-table.component.css']
+  styleUrl: './data-table.component.css',
 })
-export class DataTableComponent<T> implements OnInit {
-  @Input('configOption') configOption: any;
-  changeTableDat: EventEmitter<DatatableModel<T>> = new EventEmitter<DatatableModel<T>>();
-  datatableModel: DatatableModel<T> = new DatatableModel<T>();
-  private _datatableModelInput = new BehaviorSubject<DatatableModel<T>>(undefined);
-  public isLoading = true;
+export class DataTableComponent<T extends Record<string, string | number>>
+  implements OnInit
+{
+  @Input() configOption!: TableConfig<T>;
 
-  // change data to use getter and setter
-  set datatableModelInput(value) {
-    // set the latest value for _data BehaviorSubject
-    if (value !== undefined) {
-      this._datatableModelInput.next(value);
-    }
-  };
+  readonly changeTableDat = new EventEmitter<DatatableModel<T>>();
 
-  get datatableModelInput() {
-    // get the latest value from _data BehaviorSubject
-    return this._datatableModelInput.getValue();
+  private readonly _inputModel = new BehaviorSubject<DatatableModel<T> | undefined>(
+    undefined
+  );
+  private readonly sharedService = inject(DataTableSharedService);
+  private readonly destroyRef = inject(DestroyRef);
+
+  private readonly allData = signal<T[]>([]);
+  readonly isLoading = signal(true);
+  readonly pageIndex = signal(0);
+  readonly pageSize = signal(10);
+
+  readonly pagedData = computed(() => {
+    const start = this.pageIndex() * this.pageSize();
+    return this.allData().slice(start, start + this.pageSize());
+  });
+
+  readonly totalElements = computed(() => this.allData().length);
+
+  set datatableModelInput(value: DatatableModel<T>) {
+    this._inputModel.next(value);
   }
 
-  constructor(private _dataTableSharedService: DataTableSharedService) { }
-
-  ngOnInit() {
-    this._datatableModelInput.subscribe((response: DatatableModel<T>) => {
-      console.log('Change Input');
-
-      this.prepareTableData(response);
-    });
-
-    this.changeTableDat.subscribe((response: DatatableModel<T>) => {
-      console.log('Change table Data');
-      this.prepareTableData(response);
-    });
-
-    this._dataTableSharedService.currentMovieData.subscribe((response: any) => {
-      console.log('Change table Data Service');
-
-      this.prepareTableData(response);
-    });
+  get datatableModelInput(): DatatableModel<T> | undefined {
+    return this._inputModel.getValue();
   }
 
-  private prepareTableData(response: DatatableModel<T>) {
-    this.datatableModel.TotalElements = response && response["TotalElements"] ? response["TotalElements"] : 0;
-    this.datatableModel.TotalPages = response && response["TotalPages"] ? response["TotalPages"] : 0;
-    this.datatableModel.Data = response && response["Data"] ? response["Data"] : [];
-    this.isLoading = false;
+  ngOnInit(): void {
+    this._inputModel
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(response => {
+        if (response) this.applyData(response);
+      });
+
+    this.changeTableDat
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(response => {
+        this.applyData(response);
+      });
+
+    this.sharedService.currentMovieData$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(response => {
+        if (response) this.applyData(response as unknown as DatatableModel<T>);
+      });
   }
 
+  onPageChange(event: PageEvent): void {
+    this.pageSize.set(event.pageSize);
+    this.pageIndex.set(event.pageIndex);
+  }
+
+  getValue(item: T, key: string): string {
+    return String(item[key] ?? '');
+  }
+
+  private applyData(response: DatatableModel<T>): void {
+    this.allData.set(response.data ?? []);
+    this.pageIndex.set(0);
+    this.isLoading.set(false);
+  }
 }

@@ -1,18 +1,33 @@
-<h2>
-  Data Get From Behaviour Subject
-</h2>
-<table *ngIf="data.length">
-  <tr>
-    <th *ngFor="let column of columns">{{column.name}}</th>
-  </tr>
-  <tr *ngFor="let item of data">
-    <td *ngFor="let column of columns">
-      <img *ngIf="column.type=='image'" [src]="item[column.name]" alt="Best rated Movie">
-      <!-- <span *ngIf="column.type=='html'" [innerHTML]="item[column.name] | sanitizeHtml">
-      </span> -->
-      <span *ngIf="!column.type">
-        {{item[column.name]}}
-      </span>
-    </td>
-  </tr>
-</table>
+<div class="lazy-container">
+  <h2>Lazy-Loaded Route</h2>
+  <p class="hint">
+    This component receives data from the shared <code>BehaviorSubject</code> in
+    <code>SharedDataService</code>. Use the <strong>Search (BehaviorSubject)</strong> button on the
+    Movies page, then navigate here to see the results.
+  </p>
+
+  @if (!movies().length) {
+    <p class="empty">No data yet — search from the Movies page first.</p>
+  } @else {
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Network</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (show of movies(); track show.id) {
+          <tr>
+            <td>{{ show.name }}</td>
+            <td>{{ show.network }}</td>
+            <td>{{ show.status }}</td>
+            <td><a [routerLink]="['/show', show.id]">Details</a></td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>

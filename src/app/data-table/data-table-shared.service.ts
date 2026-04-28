@@ -1,15 +1,14 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { Movie } from '../shared/data-model';
+import { DatatableModel } from './models/datatable-model';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class DataTableSharedService {
-    private movieDataSource = new BehaviorSubject<string>("DEFAULT_MESSAGE");
-    currentMovieData = this.movieDataSource.asObservable();
+  private readonly movieDataSource = new BehaviorSubject<DatatableModel<Movie> | null>(null);
+  readonly currentMovieData$ = this.movieDataSource.asObservable();
 
-    constructor() { }
-
-    changeMovieData(data: any) {
-        this.movieDataSource.next(data);
-    }
+  changeMovieData(data: DatatableModel<Movie>): void {
+    this.movieDataSource.next(data);
+  }
 }
-

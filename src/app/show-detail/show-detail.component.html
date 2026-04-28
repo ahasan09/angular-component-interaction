@@ -1,0 +1,82 @@
+<div class="detail-container">
+  <a routerLink="/movies" mat-button color="primary" class="back-btn">
+    ← Back to Movies
+  </a>
+
+  @if (isLoading()) {
+    <div class="spinner-wrap">
+      <mat-progress-spinner mode="indeterminate" diameter="56" />
+    </div>
+  } @else if (error()) {
+    <p class="error-msg">{{ error() }}</p>
+  } @else {
+    @if (show(); as s) {
+      <mat-card class="show-card">
+        <mat-card-header>
+          <mat-card-title>{{ s.name }}</mat-card-title>
+          <mat-card-subtitle>
+            {{ s.type }} · {{ s.language }}
+            @if (s.premiered) {
+              · Premiered {{ s.premiered }}
+            }
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <div class="card-body">
+          @if (s.image) {
+            <img [src]="s.image.original" [alt]="s.name" class="poster" />
+          }
+
+          <div class="details">
+            <p><strong>Status:</strong> {{ s.status }}</p>
+            <p>
+              <strong>Network:</strong>
+              @if (s.network) {
+                {{ s.network.name }} ({{ s.network.country.name }})
+              } @else if (s.webChannel) {
+                {{ s.webChannel.name }}
+              } @else {
+                —
+              }
+            </p>
+            @if (s.rating.average) {
+              <p><strong>Rating:</strong> ⭐ {{ s.rating.average }} / 10</p>
+            }
+            @if (s.runtime) {
+              <p><strong>Runtime:</strong> {{ s.runtime }} min</p>
+            }
+            @if (s.schedule.days.length) {
+              <p>
+                <strong>Schedule:</strong>
+                {{ s.schedule.days.join(', ') }} at {{ s.schedule.time }}
+              </p>
+            }
+            @if (s.genres.length) {
+              <div class="genres">
+                <strong>Genres:</strong>
+                <mat-chip-set>
+                  @for (genre of s.genres; track genre) {
+                    <mat-chip>{{ genre }}</mat-chip>
+                  }
+                </mat-chip-set>
+              </div>
+            }
+            @if (s.summary) {
+              <div class="summary" [innerHTML]="s.summary | sanitizeHtml"></div>
+            }
+            @if (s.officialSite) {
+              <a
+                [href]="s.officialSite"
+                target="_blank"
+                rel="noopener noreferrer"
+                mat-stroked-button
+              >
+                Official Site
+              </a>
+            }
+          </div>
+        </div>
+      </mat-card>
+    }
+  }
+</div>

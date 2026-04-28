@@ -1,19 +1,49 @@
-<div *ngIf="!datatableModel?.Data?.length">
-  <h3>No Data to display</h3>
-</div>
+@if (isLoading()) {
+  <div class="loading-container">
+    <mat-progress-spinner mode="indeterminate" diameter="48" />
+  </div>
+} @else if (!pagedData().length) {
+  <p class="no-data">No data to display.</p>
+} @else {
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          @for (col of configOption.columns; track col.name) {
+            <th>{{ col.name }}</th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of pagedData(); track $index) {
+          <tr>
+            @for (col of configOption.columns; track col.name) {
+              <td>
+                @if (col.type === 'image') {
+                  <img [src]="getValue(item, col.name)" alt="{{ getValue(item, 'name') }}" class="show-image" />
+                } @else if (col.type === 'html') {
+                  <div [innerHTML]="getValue(item, col.name) | sanitizeHtml"></div>
+                } @else if (col.type === 'link') {
+                  <a [routerLink]="[col.linkPrefix, getValue(item, 'id')]" class="detail-link">
+                    View Details
+                  </a>
+                } @else {
+                  {{ getValue(item, col.name) }}
+                }
+              </td>
+            }
+          </tr>
+        }
+      </tbody>
+    </table>
 
-<table *ngIf="datatableModel?.Data?.length">
-  <tr>
-    <th *ngFor="let column of configOption?.Columns">{{column.name}}</th>
-  </tr>
-  <tr *ngFor="let item of datatableModel?.Data">
-    <td *ngFor="let column of configOption?.Columns">
-      <img *ngIf="column.type=='image'" [src]="item[column.name]" alt="Best rated Movie">
-      <div *ngIf="column.type=='html'" [innerHTML]="item[column.name] | sanitizeHtml">
-      </div>
-      <div *ngIf="!column.type">
-        {{item[column.name]}}
-      </div>
-    </td>
-  </tr>
-</table>
+    <mat-paginator
+      [length]="totalElements()"
+      [pageSize]="pageSize()"
+      [pageIndex]="pageIndex()"
+      [pageSizeOptions]="[5, 10, 25]"
+      (page)="onPageChange($event)"
+      aria-label="Select page"
+    />
+  </div>
+}

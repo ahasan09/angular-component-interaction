@@ -1,15 +1,21 @@
-export class Movie {
-    Name: string;
-    Image: string;
-    Network: string;
-    Summary: string;
-    Status: string;
+import { TvMazeShow } from './tvmaze.models';
 
-    constructor(serverModel: any) {
-        this.Name = serverModel.name;
-        this.Image = serverModel.image ? serverModel.image.medium : '';
-        this.Network = serverModel.network ? serverModel.network.name : '';
-        this.Summary = serverModel.summary;
-        this.Status = serverModel.status;
-    }
+export class Movie {
+  [key: string]: string | number;
+
+  id: number;
+  name: string;
+  image: string;
+  network: string;
+  summary: string;
+  status: string;
+
+  constructor(show: TvMazeShow) {
+    this.id = show.id;
+    this.name = show.name;
+    this.image = show.image?.medium ?? '';
+    this.network = show.network?.name ?? show.webChannel?.name ?? '';
+    this.summary = show.summary ?? '';
+    this.status = show.status;
+  }
 }
