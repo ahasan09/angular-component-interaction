@@ -50,7 +50,7 @@ describe('MoviesComponent', () => {
   });
 
   it('should create', fakeAsync(() => {
-    spyOn(sharedDataService, 'search').and.returnValue(of([]));
+    jest.spyOn(sharedDataService, 'search').mockReturnValue(of([]));
     fixture.detectChanges();
     tick();
     expect(component).toBeTruthy();
@@ -58,36 +58,36 @@ describe('MoviesComponent', () => {
 
   it('should load movies on init', fakeAsync(() => {
     const movies = [new Movie(mockShow)];
-    spyOn(sharedDataService, 'search').and.returnValue(of(movies));
+    jest.spyOn(sharedDataService, 'search').mockReturnValue(of(movies));
 
     fixture.detectChanges();
     tick();
 
     expect(sharedDataService.search).toHaveBeenCalledWith('Popular');
-    expect(component.isLoading()).toBeFalse();
+    expect(component.isLoading()).toBe(false);
   }));
 
   it('should show loading indicator while fetching', fakeAsync(() => {
     // Use a Subject so the observable does not resolve until we choose
     const subject = new Subject<Movie[]>();
-    spyOn(sharedDataService, 'search').and.returnValue(subject.asObservable());
+    jest.spyOn(sharedDataService, 'search').mockReturnValue(subject.asObservable());
     fixture.detectChanges();
-    expect(component.isLoading()).toBeTrue();
+    expect(component.isLoading()).toBe(true);
 
     subject.next([]);
     subject.complete();
     tick();
 
-    expect(component.isLoading()).toBeFalse();
+    expect(component.isLoading()).toBe(false);
   }));
 
   it('should handle search error gracefully', fakeAsync(() => {
-    spyOn(sharedDataService, 'search').and.returnValue(
+    jest.spyOn(sharedDataService, 'search').mockReturnValue(
       throwError(() => new Error('Network error'))
     );
     fixture.detectChanges();
     tick();
 
-    expect(component.isLoading()).toBeFalse();
+    expect(component.isLoading()).toBe(false);
   }));
 });

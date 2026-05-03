@@ -11,13 +11,13 @@ An Angular application demonstrating component interaction techniques, lazy load
 
 ## Tech Stack
 
-- Angular (CLI v7.3.1)
+- Angular (CLI v21.2.9)
 - TypeScript
 - Angular Router
 
 ## Prerequisites
 
-- [Node.js](https://nodejs.org/) v10+
+- [Node.js](https://nodejs.org/) v22+
 - Angular CLI: `npm install -g @angular/cli`
 
 ## Getting Started
@@ -26,7 +26,7 @@ An Angular application demonstrating component interaction techniques, lazy load
 git clone https://github.com/ahasan09/angular-component-interaction
 cd angular-component-interaction
 npm install
-ng serve
+npm start
 ```
 
 Open [http://localhost:4200](http://localhost:4200). The app reloads automatically on file changes.
@@ -35,11 +35,10 @@ Open [http://localhost:4200](http://localhost:4200). The app reloads automatical
 
 | Command | Description |
 |---------|-------------|
-| `ng serve` | Start dev server on port 4200 |
-| `ng build` | Build to `dist/` |
-| `ng build --prod` | Production build |
-| `ng test` | Run unit tests (Karma) |
-| `ng e2e` | Run end-to-end tests (Protractor) |
+| `npm start` | Start dev server on port 4200 |
+| `npm run build` | Build to `dist/` |
+| `npm run test` | Run unit tests (Jest) |
+| `npm run e2e` | Run end-to-end tests (Playwright) |
 
 ## Project Structure
 

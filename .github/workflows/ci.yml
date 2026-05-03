@@ -22,14 +22,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Firefox
-        uses: browser-actions/setup-firefox@v1
-
       - name: Lint
         run: npm run lint
 
       - name: Unit tests
-        run: npm run test -- --watch=false --browsers=FirefoxHeadless --no-progress
+        run: npm run test
 
       - name: Build
         run: npm run build
