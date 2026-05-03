@@ -7,7 +7,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { fromEvent } from 'rxjs';
@@ -27,15 +27,14 @@ import { SharedDataService } from '../shared/shared-data.service';
   selector: 'app-movies',
   standalone: true,
   imports: [
-    CommonModule,
     FormsModule,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
     MatProgressBarModule,
     MatSnackBarModule,
-    DataTableComponent,
-  ],
+    DataTableComponent
+],
   templateUrl: './movies.component.html',
   styleUrl: './movies.component.css',
 })

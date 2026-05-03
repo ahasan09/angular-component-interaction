@@ -1,5 +1,5 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -13,14 +13,13 @@ import { SanitizeHtmlPipe } from '../shared/sanitize-html.pipe';
   selector: 'app-show-detail',
   standalone: true,
   imports: [
-    CommonModule,
     RouterLink,
     MatButtonModule,
     MatCardModule,
     MatChipsModule,
     MatProgressSpinnerModule,
-    SanitizeHtmlPipe,
-  ],
+    SanitizeHtmlPipe
+],
   templateUrl: './show-detail.component.html',
   styleUrl: './show-detail.component.css',
 })

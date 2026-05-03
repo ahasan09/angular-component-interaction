@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map } from 'rxjs/operators';
@@ -9,7 +9,7 @@ import { Movie } from '../shared/data-model';
 @Component({
   selector: 'app-lazy-load',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [RouterLink],
   templateUrl: './lazy-load.component.html',
   styleUrl: './lazy-load.component.css',
 })

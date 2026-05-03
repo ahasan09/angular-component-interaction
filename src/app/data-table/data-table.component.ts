@@ -8,7 +8,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BehaviorSubject } from 'rxjs';
@@ -33,12 +33,11 @@ export interface TableConfig<T> {
   selector: 'app-data-table',
   standalone: true,
   imports: [
-    CommonModule,
     RouterLink,
     MatPaginatorModule,
     MatProgressSpinnerModule,
-    SanitizeHtmlPipe,
-  ],
+    SanitizeHtmlPipe
+],
   templateUrl: './data-table.component.html',
   styleUrl: './data-table.component.css',
 })
