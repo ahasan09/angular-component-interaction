@@ -1,15 +1,15 @@
 # Angular Component Interaction
 
-Angular 19 application demonstrating three component-interaction patterns with Angular Material, lazy-loaded standalone components, and TVMaze API show search.
+Angular 21 application demonstrating three component-interaction patterns with Angular Material, lazy-loaded standalone components, and TVMaze API show search.
 
 ## Tech Stack
-- Angular 19 (standalone components, signals, functional API)
-- Angular Material 19
-- TypeScript 5.6 (strict mode)
+- Angular 21 (standalone components, signals, functional API)
+- Angular Material 21
+- TypeScript 5.9 (strict mode)
 - TVMaze REST API
 - RxJS 7 BehaviorSubject for shared state
-- ESLint + @angular-eslint (replaces deprecated TSLint)
-- Karma + Jasmine unit tests (Firefox headless)
+- ESLint + @angular-eslint (flat config)
+- Jest unit tests
 - Playwright e2e tests
 
 ## Project Structure
@@ -39,14 +39,14 @@ angular-component-interaction/
 └── .github/workflows/ci.yml       # lint + test + build CI
 ```
 
-## Development
+## Development Commands
 ```bash
 npm install
-ng serve          # dev server at http://localhost:4200
-ng build          # production build
-ng test           # unit tests (Firefox headless)
-npm run lint      # ESLint
-npm run e2e       # Playwright e2e (requires ng serve running or uses webServer)
+npm start          # dev server at http://localhost:4200 (or ng serve)
+npm run build      # production build
+npm test           # unit tests (Jest)
+npm run lint       # ESLint
+npm run e2e        # Playwright e2e (requires dev server running or uses webServer)
 ```
 
 ## Component Interaction Patterns Demonstrated
@@ -60,3 +60,4 @@ npm run e2e       # Playwright e2e (requires ng serve running or uses webServer)
 - Signals (`signal`, `computed`) used for local UI state; `toSignal` converts BehaviorSubject to signal in LazyLoadComponent
 - `takeUntilDestroyed(destroyRef)` for automatic subscription cleanup
 - `DomSanitizer.sanitize()` (not `bypassSecurityTrustHtml`) for safe HTML rendering
+
