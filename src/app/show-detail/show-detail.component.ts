@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,6 +21,7 @@ import { SanitizeHtmlPipe } from '../shared/sanitize-html.pipe';
     SanitizeHtmlPipe
 ],
   templateUrl: './show-detail.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './show-detail.component.css',
 })
 export class ShowDetailComponent implements OnInit {

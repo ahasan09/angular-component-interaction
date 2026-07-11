@@ -6,6 +6,7 @@ import {
   ViewChild,
   inject,
   signal,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
@@ -36,6 +37,7 @@ import { SharedDataService } from '../shared/shared-data.service';
     DataTableComponent
 ],
   templateUrl: './movies.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './movies.component.css',
 })
 export class MoviesComponent implements AfterViewInit {

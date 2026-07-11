@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
   selector: 'app-not-found',
   standalone: true,
   imports: [RouterLink, MatButtonModule],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <div style="text-align:center;margin-top:64px">
       <h1>404</h1>

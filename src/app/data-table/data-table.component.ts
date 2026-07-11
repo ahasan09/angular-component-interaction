@@ -7,6 +7,7 @@ import {
   computed,
   inject,
   signal,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import { RouterLink } from '@angular/router';
@@ -39,6 +40,7 @@ export interface TableConfig<T> {
     SanitizeHtmlPipe
 ],
   templateUrl: './data-table.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './data-table.component.css',
 })
 export class DataTableComponent<T extends Record<string, string | number>>

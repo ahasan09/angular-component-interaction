@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -11,6 +11,7 @@ import { Movie } from '../shared/data-model';
   standalone: true,
   imports: [RouterLink],
   templateUrl: './lazy-load.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './lazy-load.component.css',
 })
 export class LazyLoadComponent {
